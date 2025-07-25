@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Playful Funhouse: 7 silly and addictive mini games to laugh, share, and enjoy." />
+  <title>Playful Funhouse - Fun Mini Games & More</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
+
+    body {
+      font-family: 'Comic Neue', cursive, sans-serif;
+      margin: 0;
+      background: #fdf6e3;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      background: #ff6f61;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+    }
+    header p {
+      margin: 0.3rem 0 0 0;
+      font-style: italic;
+      font-size: 1.2rem;
+    }
+    main {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .intro {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+      gap: 1.8rem;
+    }
+    .game-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      padding: 1rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .game-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    .game-thumb {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      background-color: #eee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 3rem;
+      color: #ff6f61;
+    }
+    .game-title {
+      font-weight: bold;
+      font-size: 1.3rem;
+      margin: 0.5rem 0 0.7rem 0;
+    }
+    .game-desc {
+      font-size: 0.95rem;
+      color: #555;
+      flex-grow: 1;
+    }
+    .game-link {
+      margin-top: 1rem;
+      background: #ff6f61;
+      color: white;
+      padding: 0.5rem 1.2rem;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 3px 6px rgba(255,111,97,0.4);
+      transition: background 0.3s ease;
+    }
+    .game-link:hover {
+      background: #e65c4f;
+    }
+
+    /* Share button style */
+    .share-section {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .share-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #ff6f61;
+      color: white;
+      border-radius: 5px;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+    }
+    .share-btn:hover {
+      background-color: #e65c4f;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #777;
+      border-top: 1px solid #ddd;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Playful Funhouse</h1>
+  <p>Your daily dose of silly & addictive mini games!</p>
+</header>
+
+<main>
+  <section class="intro">
+    <p>Welcome to <strong>Playful Funhouse</strong>, your new favorite spot on the web for quick, silly, and addictive games! Dive into our collection of seven fun mini-games and interactive tools designed to make you laugh, think, and share with friends. No boring ads, no complicated rules — just pure fun that works on any device. Explore the games, share your favorites, and come back anytime for a quick dose of joy!</p>
+  </section>
+
+  <section class="games-grid">
+    <!-- Each card: Thumbnail + Title + Description + Link -->
+    <article class="game-card">
+      <div class="game-thumb">📸</div>
+      <h2 class="game-title">Meme Caption Maker</h2>
+      <p class="game-desc">Upload or choose images, add hilarious captions, and share viral memes instantly!</p>
+      <a href="game1-meme.html" class="game-link">Play Now</a>
+    </article>
+    <article class="game-card">
+      <div class="game-thumb">🙅‍♂️</div>
+      <h2 class="game-title">Random Excuse Generator</h2>
+      <p class="game-desc">Get silly excuses for any situation with a single click. Perfect for quick laughs!</p>
+      <a href="game2-excuse.html" class="game-link">Play Now</a>
+    </article>
+    <article class="game-card">
+      <div class="game-thumb">⌨️</div>
+      <h2 class="game-title">Typing Speed Test</h2>
+      <p class="game-desc">Test your typing speed with funny sentences and challenge your friends!</p>
+      <a href="game3-typing-speed.html" class="game-link">Play Now</a>
+    </article>
+    <article class="game-card">
+      <div class="game-thumb">❓</div>
+      <h2 class="game-title">Emoji Quiz</h2>
+      <p class="game-desc">Guess the phrase or movie from emojis. Fun brain teaser for everyone!</p>
+      <a href="game4-emoji-quiz.html" class="game-link">Play Now</a>
+    </article>
+    <article class="game-card">
+      <div class="game-thumb">🐒</div>
+      <h2 class="game-title">Silly Personality Test</h2>
+      <p class="game-desc">Answer goofy questions to find out which silly animal or fruit you are!</p>
+      <a href="game5-silly-personality.html" class="game-link">Play Now</a>
+    </article>
+    <article class="game-card">
+      <div class="game-thumb">🎨</div>
+      <h2 class="game-title">Pixel Art Drawing Board</h2>
+      <p class="game-desc">Draw pixel art with funny stamps and share your creative masterpieces!</p>
+      <a href="game6-pixel-art-board.html" class="game-link">Play Now</a>
+    </article>
+    <article class="game-card">
+      <div class="game-thumb">💬</div>
+      <h2 class="game-title">Compliment Generator</h2>
+      <p class="game-desc">Get random funny compliments to brighten your day or share with friends!</p>
+      <a href="game7-compliment-generator.html" class="game-link">Play Now</a>
+    </article>
+  </section>
+
+  <!-- Social Share Section -->
+  <section class="share-section">
+    <button class="share-btn" onclick="sharePage()">📤 Share This Page</button>
+    <p id="share-error" style="color: red; display: none; margin-top: 10px;">Sharing not supported on this browser.</p>
+  </section>
+</main>
+
+<footer>
+  &copy; 2025 Playful Funhouse — Made with ❤️ for fun and laughs
+</footer>
+
+<!-- JavaScript for Web Share -->
+<script>
+  function sharePage() {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Playful Funhouse',
+        text: 'Check out these fun and silly mini-games!',
+        url: window.location.href
+      }).catch((err) => {
+        console.error('Error sharing:', err);
+        document.getElementById('share-error').style.display = 'block';
+      });
+    } else {
+      document.getElementById('share-error').style.display = 'block';
+    }
+  }
+</script>
+
+</body>
+</html>
+

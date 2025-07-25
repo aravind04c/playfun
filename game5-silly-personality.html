@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Silly Personality Test 😂</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #ffe6e6;
+      color: #222;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .question {
+      font-size: 1.3rem;
+      margin: 1.5rem 0 0.5rem;
+    }
+    label {
+      display: block;
+      margin: 0.4rem 0;
+    }
+    button {
+      font-size: 1rem;
+      padding: 0.6rem 1rem;
+      margin-top: 1.5rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #ff69b4;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #ff1493;
+    }
+    .result {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Silly Personality Test 🤪</h1>
+
+  <form id="quizForm">
+    <div class="question">1. Pick a random object:</div>
+    <label><input type="radio" name="q1" value="a"> Banana Peel 🍌</label>
+    <label><input type="radio" name="q1" value="b"> Flying Taco 🌮</label>
+    <label><input type="radio" name="q1" value="c"> Sleepy Panda 🐼</label>
+
+    <div class="question">2. What’s your dream job?</div>
+    <label><input type="radio" name="q2" value="a"> Bubble Wrap Popper</label>
+    <label><input type="radio" name="q2" value="b"> Professional Napper 😴</label>
+    <label><input type="radio" name="q2" value="c"> Pizza Critic 🍕</label>
+
+    <div class="question">3. Choose a superpower:</div>
+    <label><input type="radio" name="q3" value="a"> Laugh Beam 😂</label>
+    <label><input type="radio" name="q3" value="b"> Infinite Snacks 🍪</label>
+    <label><input type="radio" name="q3" value="c"> Dance Teleportation 💃</label>
+
+    <button type="button" onclick="showResult()">Reveal My Personality</button>
+  </form>
+
+  <div class="result" id="result"></div>
+  <button style="display:none;" id="retake" onclick="resetQuiz()">Retake Test</button>
+
+  <script>
+    function showResult() {
+      const form = document.getElementById("quizForm");
+      const q1 = form.q1.value;
+      const q2 = form.q2.value;
+      const q3 = form.q3.value;
+
+      if (!q1 || !q2 || !q3) {
+        alert("Please answer all questions!");
+        return;
+      }
+
+      const personalities = [
+        "You are a Sleepy Pineapple 🍍💤",
+        "You're a Sneezing Unicorn 🦄🤧",
+        "You're a Dramatic Potato 🥔🎭",
+        "You're a Dancing Banana 💃🍌",
+        "You're a Laughing Broccoli 😂🥦",
+        "You're a Chill Llama 🦙😎",
+        "You're a Pizza-Flavored Cloud 🍕☁️"
+      ];
+
+      const randomIndex = Math.floor(Math.random() * personalities.length);
+      document.getElementById("result").textContent = personalities[randomIndex];
+      document.getElementById("retake").style.display = "inline-block";
+      form.style.display = "none";
+    }
+
+    function resetQuiz() {
+      document.getElementById("quizForm").reset();
+      document.getElementById("quizForm").style.display = "block";
+      document.getElementById("result").textContent = "";
+      document.getElementById("retake").style.display = "none";
+    }
+  </script>
+
+</body>
+</html>

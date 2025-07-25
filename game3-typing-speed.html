@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Typing Speed Challenge - Playful Funhouse</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #d6eaff, #62a0ff);
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #0a2e73;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 700;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
+    header a {
+      color: #0a2e73;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 0.4rem;
+    }
+    main {
+      background: #ffffffdd;
+      padding: 2rem 3rem;
+      border-radius: 15px;
+      box-shadow: 0 8px 15px rgba(10, 46, 115, 0.3);
+      max-width: 600px;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    #phrase {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      padding: 0.5rem 1rem;
+      background: #e0f0ff;
+      border-radius: 8px;
+      user-select: none;
+    }
+    #input-area {
+      margin-bottom: 1rem;
+    }
+    #user-input {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      border: 2px solid #62a0ff;
+      box-sizing: border-box;
+    }
+    #submit-btn, #next-btn {
+      background: #62a0ff;
+      border: none;
+      color: white;
+      font-size: 1.1rem;
+      padding: 0.7rem 2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 5px 12px rgba(98, 160, 255, 0.6);
+      transition: background 0.3s ease;
+      margin-top: 0.5rem;
+      margin-right: 0.5rem;
+    }
+    #submit-btn:hover, #next-btn:hover {
+      background: #3f7ddb;
+    }
+    #result {
+      margin-top: 1rem;
+      font-weight: 700;
+      font-size: 1.2rem;
+      min-height: 60px;
+      color: #0a2e73;
+    }
+    @media (max-width: 420px) {
+      main {
+        padding: 1.5rem 2rem;
+      }
+      #phrase {
+        font-size: 1.2rem;
+      }
+      #user-input {
+        font-size: 1rem;
+      }
+      #submit-btn, #next-btn {
+        font-size: 1rem;
+        padding: 0.6rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Typing Speed Challenge</h1>
+  <a href="index.html">← Back to Home</a>
+</header>
+
+<main>
+  <div id="phrase">Loading phrase...</div>
+
+  <div id="input-area">
+    <input id="user-input" type="text" placeholder="Type the phrase here..." autocomplete="off" />
+  </div>
+
+  <button id="submit-btn">Submit</button>
+  <button id="next-btn" style="display:none;">Try Another</button>
+
+  <div id="result"></div>
+</main>
+
+<script>
+  const phrases = [
+    "The quick brown fox jumps over the lazy dog.",
+    "I scream, you scream, we all scream for ice cream.",
+    "Typing fast is the key to success.",
+    "Practice makes perfect in every game.",
+    "Never give up on your dreams.",
+    "Time flies when you’re having fun.",
+    "Silly jokes make the day brighter.",
+    "Coding is like solving puzzles every day.",
+    "Be the change you want to see in the world.",
+    "Fun and games keep the mind sharp.",
+    "Coffee helps keep the ideas flowing.",
+    "A watched pot never boils.",
+    "Keep calm and carry on typing.",
+    "You miss 100% of the shots you don’t take.",
+    "Life is better with a bit of humor."
+  ];
+
+  const phraseDiv = document.getElementById('phrase');
+  const userInput = document.getElementById('user-input');
+  const submitBtn = document.getElementById('submit-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const resultDiv = document.getElementById('result');
+
+  let currentPhrase = "";
+  let startTime;
+
+  function loadPhrase() {
+    const randomIndex = Math.floor(Math.random() * phrases.length);
+    currentPhrase = phrases[randomIndex];
+    phraseDiv.textContent = currentPhrase;
+    userInput.value = "";
+    userInput.disabled = false;
+    userInput.focus();
+    resultDiv.textContent = "";
+    submitBtn.style.display = "inline-block";
+    nextBtn.style.display = "none";
+    startTime = new Date();
+  }
+
+  function calculateAccuracy(original, typed) {
+    const originalWords = original.trim().split(" ");
+    const typedWords = typed.trim().split(" ");
+    let correctWords = 0;
+    for (let i = 0; i < Math.min(originalWords.length, typedWords.length); i++) {
+      if (originalWords[i] === typedWords[i]) correctWords++;
+    }
+    return (correctWords / originalWords.length) * 100;
+  }
+
+  function submitTyping() {
+    const typedText = userInput.value.trim();
+    if (!typedText) {
+      alert("Please type the phrase before submitting!");
+      return;
+    }
+
+    const endTime = new Date();
+    const timeTaken = (endTime - startTime) / 1000; // seconds
+    const accuracy = calculateAccuracy(currentPhrase, typedText);
+    const wordsCount = currentPhrase.trim().split(" ").length;
+    const wpm = (typedText.split(" ").length / timeTaken) * 60;
+
+    let message = `Time: ${timeTaken.toFixed(2)} seconds | Accuracy: ${accuracy.toFixed(1)}% | WPM: ${wpm.toFixed(1)}`;
+
+    if (accuracy === 100) {
+      message += " 🎉 Perfect!";
+    } else if (accuracy > 80) {
+      message += " 👍 Great job!";
+    } else {
+      message += " 🤔 Keep practicing!";
+    }
+
+    resultDiv.textContent = message;
+    userInput.disabled = true;
+    submitBtn.style.display = "none";
+    nextBtn.style.display = "inline-block";
+  }
+
+  submitBtn.addEventListener('click', submitTyping);
+  nextBtn.addEventListener('click', loadPhrase);
+
+  window.onload = loadPhrase;
+</script>
+
+</body>
+</html>

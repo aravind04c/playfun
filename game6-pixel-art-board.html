@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pixel Art Drawing 🎨 with Undo/Redo & Save</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #f0fff0;
+      color: #333;
+      text-align: center;
+      padding: 1.5rem;
+    }
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+    }
+    #board {
+      display: grid;
+      margin: 1rem auto;
+      border: 2px solid #ddd;
+      touch-action: none; /* prevent touch scrolling while drawing */
+    }
+    .pixel {
+      border: 1px solid #ddd;
+      background-color: #fff;
+      cursor: pointer;
+      width: var(--pixel-size);
+      height: var(--pixel-size);
+    }
+    input[type="color"], input[type="number"] {
+      margin: 0.5rem;
+      padding: 0.3rem;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      margin: 0.3rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #20c997;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #138d75;
+    }
+    #controls {
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Pixel Art Drawing 🎨🧑‍🎨</h1>
+
+  <div id="controls">
+    <label>Color: <input type="color" id="colorPicker" value="#000000" /></label>
+    <label>Grid Size (4-64): <input type="number" id="gridSize" value="16" min="4" max="64" /></label>
+    <button onclick="resizeBoard()">Resize Board</button>
+    <button onclick="undo()">Undo</button>
+    <button onclick="redo()">Redo</button>
+    <button onclick="clearBoard()">Clear</button>
+    <button onclick="saveImage()">Save Art</button>
+  </div>
+
+  <div id="board" style="--pixel-size: 20px;"></div>
+
+  <script>
+    const board = document.getElementById('board');
+    const colorPicker = document.getElementById('colorPicker');
+    const gridSizeInput = document.getElementById('gridSize');
+
+    // State variables for undo/redo
+    let history = [];
+    let historyIndex = -1;
+    let isDrawing = false;
+
+    // Current grid size and pixel size (in px)
+    let gridSize = 16;
+    let pixelSize = 20;
+
+    function createBoard(size = 16) {
+      gridSize = size;
+      pixelSize = Math.min(600 / size, 40); // Max board width ~600px, max pixel 40px
+      board.style.setProperty('--pixel-size', pixelSize + 'px');
+      board.style.gridTemplateColumns = `repeat(${size}, ${pixelSize}px)`;
+      board.style.gridTemplateRows = `repeat(${size}, ${pixelSize}px)`;
+      board.innerHTML = '';
+
+      for (let i = 0; i < size * size; i++) {
+        const pixel = document.createElement('div');
+        pixel.classList.add('pixel');
+        pixel.dataset.index = i;
+        pixel.style.backgroundColor = '#fff';
+        // Click or drag coloring
+        pixel.addEventListener('mousedown', paintPixel);
+        pixel.addEventListener('mouseenter', paintPixelOnDrag);
+        board.appendChild(pixel);
+      }
+
+      saveHistory(); // Save initial blank state
+    }
+
+    // Paint pixel handler
+    function paintPixel(e) {
+      isDrawing = true;
+      setPixelColor(e.target);
+    }
+
+    function paintPixelOnDrag(e) {
+      if (isDrawing) {
+        setPixelColor(e.target);
+      }
+    }
+
+    // Set pixel color and save history only if color changed
+    function setPixelColor(pixel) {
+      if (pixel.style.backgroundColor !== colorPicker.value) {
+        pixel.style.backgroundColor = colorPicker.value;
+        saveHistory();
+      }
+    }
+
+    // Stop drawing on mouse up anywhere
+    window.addEventListener('mouseup', () => {
+      if (isDrawing) {
+        isDrawing = false;
+      }
+    });
+
+    // Save current board colors to history (undo stack)
+    function saveHistory() {
+      // Limit history size to 50 for memory
+      if (history.length >= 50) history.shift();
+
+      // Trim redo history if undo done
+      if (historyIndex < history.length - 1) {
+        history = history.slice(0, historyIndex + 1);
+      }
+
+      const pixels = [...document.querySelectorAll('.pixel')];
+      const state = pixels.map(p => p.style.backgroundColor);
+      history.push(state);
+      historyIndex = history.length - 1;
+      updateUndoRedoButtons();
+    }
+
+    function undo() {
+      if (historyIndex > 0) {
+        historyIndex--;
+        loadHistory(history[historyIndex]);
+      }
+      updateUndoRedoButtons();
+    }
+
+    function redo() {
+      if (historyIndex < history.length - 1) {
+        historyIndex++;
+        loadHistory(history[historyIndex]);
+      }
+      updateUndoRedoButtons();
+    }
+
+    function loadHistory(state) {
+      const pixels = [...document.querySelectorAll('.pixel')];
+      pixels.forEach((pixel, i) => {
+        pixel.style.backgroundColor = state[i];
+      });
+    }
+
+    function updateUndoRedoButtons() {
+      document.querySelector('button[onclick="undo()"]').disabled = historyIndex <= 0;
+      document.querySelector('button[onclick="redo()"]').disabled = historyIndex >= history.length - 1;
+    }
+
+    function clearBoard() {
+      const pixels = document.querySelectorAll('.pixel');
+      pixels.forEach(p => p.style.backgroundColor = '#fff');
+      saveHistory();
+    }
+
+    function resizeBoard() {
+      let size = parseInt(gridSizeInput.value);
+      if (isNaN(size) || size < 4 || size > 64) {
+        alert('Please enter a grid size between 4 and 64');
+        return;
+      }
+      createBoard(size);
+      history = [];
+      historyIndex = -1;
+      saveHistory();
+      updateUndoRedoButtons();
+    }
+
+    function saveImage() {
+      // Create canvas same size as grid
+      const canvas = document.createElement('canvas');
+      canvas.width = gridSize;
+      canvas.height = gridSize;
+      const ctx = canvas.getContext('2d');
+
+      const pixels = [...document.querySelectorAll('.pixel')];
+      pixels.forEach((pixel, i) => {
+        const color = pixel.style.backgroundColor || 'white';
+        ctx.fillStyle = color;
+        const x = i % gridSize;
+        const y = Math.floor(i / gridSize);
+        ctx.fillRect(x, y, 1, 1);
+      });
+
+      // Scale canvas up for better quality
+      const scale = 20;
+      const scaledCanvas = document.createElement('canvas');
+      scaledCanvas.width = canvas.width * scale;
+      scaledCanvas.height = canvas.height * scale;
+      const scaledCtx = scaledCanvas.getContext('2d');
+      scaledCtx.imageSmoothingEnabled = false;
+      scaledCtx.drawImage(canvas, 0, 0, scaledCanvas.width, scaledCanvas.height);
+
+      // Trigger download
+      const link = document.createElement('a');
+      link.download = 'pixel-art.png';
+      link.href = scaledCanvas.toDataURL();
+      link.click();
+    }
+
+    createBoard(gridSize);
+    updateUndoRedoButtons();
+  </script>
+</body>
+</html>

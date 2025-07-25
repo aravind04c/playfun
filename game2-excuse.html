@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Random Excuse Generator - Playful Funhouse</title>
+  <style>
+    body {
+      font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+      background: linear-gradient(135deg, #fceabb, #f8b500);
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #4a2c00;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    header h1 {
+      font-size: 2rem;
+      margin: 0;
+      color: #703800;
+      text-shadow: 1px 1px 0 #fff;
+    }
+    header a {
+      color: #703800;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 0.5rem;
+      display: inline-block;
+    }
+    main {
+      background: #fff8dc;
+      padding: 2rem 3rem;
+      border-radius: 15px;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+      max-width: 600px;
+      text-align: center;
+    }
+    #excuse {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      min-height: 100px;
+      line-height: 1.3;
+      font-style: italic;
+    }
+    button {
+      background: #f8b500;
+      border: none;
+      padding: 0.8rem 2rem;
+      font-size: 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 5px 10px rgba(248,181,0,0.5);
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #d99c00;
+    }
+    @media (max-width: 400px) {
+      main {
+        padding: 1.5rem 2rem;
+      }
+      #excuse {
+        font-size: 1.2rem;
+        min-height: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Random Excuse Generator</h1>
+  <a href="index.html">← Back to Home</a>
+</header>
+
+<main>
+  <div id="excuse">Click the button below to get a funny excuse!</div>
+  <button id="generate-btn">Generate Excuse</button>
+</main>
+
+<script>
+  const excuses = [
+    "My dog ate my homework.",
+    "I thought today was Sunday.",
+    "I got stuck in a traffic jam of turtles.",
+    "My alarm clock went on strike.",
+    "I was abducted by aliens (briefly).",
+    "I’m still recovering from last weekend.",
+    "The internet was down... in my dreams.",
+    "I lost track of time while counting sheep.",
+    "I was trapped in a Netflix binge.",
+    "I accidentally time-traveled to yesterday.",
+    "My brain took a coffee break.",
+    "I was too busy inventing excuses.",
+    "The cat hid my phone.",
+    "I was practicing my ninja moves.",
+    "My shoes had other plans today."
+  ];
+
+  const excuseDiv = document.getElementById('excuse');
+  const generateBtn = document.getElementById('generate-btn');
+
+  function generateExcuse() {
+    const randomIndex = Math.floor(Math.random() * excuses.length);
+    excuseDiv.textContent = excuses[randomIndex];
+  }
+
+  generateBtn.addEventListener('click', generateExcuse);
+</script>
+
+</body>
+</html>

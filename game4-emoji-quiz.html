@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Emoji Quiz 🤔</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background: #fff3cd;
+      color: #222;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2.5rem;
+    }
+    .emoji {
+      font-size: 5rem;
+      margin: 2rem 0;
+    }
+    input {
+      font-size: 1.2rem;
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: 2px solid #ccc;
+      width: 60%;
+      max-width: 300px;
+    }
+    button {
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      margin: 1rem;
+      border: none;
+      border-radius: 10px;
+      background-color: #f48c06;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #e36414;
+    }
+    .result {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🤯 Emoji Quiz</h1>
+  <div class="emoji" id="emoji">🍕💍</div>
+  
+  <input type="text" id="guess" placeholder="What's your guess?" />
+  <br />
+  <button onclick="checkAnswer()">Submit</button>
+  <button onclick="showClue()">Clue</button>
+  <button onclick="nextEmoji()">Next Emoji</button>
+  
+  <div class="result" id="result"></div>
+
+  <script>
+    const emojiData = [
+      { emoji: "🍕💍", answer: "pizza ring", clue: "A wedding with a cheesy twist." },
+      { emoji: "🎬🐱", answer: "cat movie", clue: "Blockbuster feline flick." },
+      { emoji: "🧠🔥", answer: "mind blown", clue: "When thoughts go kaboom." },
+      { emoji: "💤🎤", answer: "sleeping singer", clue: "Boring concert?" },
+      { emoji: "🦄🍦", answer: "unicorn ice cream", clue: "Magical frozen treat." },
+      { emoji: "👽📞", answer: "alien call", clue: "ET is dialing." },
+      { emoji: "🚀🪑", answer: "rocket chair", clue: "Sit and launch!" },
+      { emoji: "😂📚", answer: "funny book", clue: "Read and LOL." },
+    ];
+
+    let currentIndex = 0;
+
+    function displayEmoji() {
+      document.getElementById("emoji").textContent = emojiData[currentIndex].emoji;
+      document.getElementById("result").textContent = "";
+      document.getElementById("guess").value = "";
+    }
+
+    function checkAnswer() {
+      const userGuess = document.getElementById("guess").value.toLowerCase().trim();
+      const correct = emojiData[currentIndex].answer.toLowerCase();
+      if (userGuess === correct) {
+        document.getElementById("result").textContent = "✅ Correct! 😂";
+      } else {
+        document.getElementById("result").textContent = "❌ Nope! Try again!";
+      }
+    }
+
+    function showClue() {
+      alert("Clue: " + emojiData[currentIndex].clue);
+    }
+
+    function nextEmoji() {
+      currentIndex = (currentIndex + 1) % emojiData.length;
+      displayEmoji();
+    }
+
+    displayEmoji(); // initialize
+  </script>
+
+</body>
+</html>
+

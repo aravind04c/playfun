@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meme Caption Maker - Playful Funhouse</title>
+  <style>
+    body {
+      font-family: 'Comic Neue', cursive, sans-serif;
+      background: #fdf6e3;
+      margin: 0;
+      padding: 1rem;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header {
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    header h1 {
+      margin: 0.3rem 0;
+      color: #ff6f61;
+    }
+    header a {
+      text-decoration: none;
+      color: #ff6f61;
+      font-weight: bold;
+    }
+    main {
+      width: 100%;
+      max-width: 600px;
+      background: white;
+      padding: 1rem 1.5rem 2rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input[type="file"] {
+      margin-top: 0.3rem;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-top: 0.3rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .presets {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .preset-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+    .preset-img.selected {
+      border-color: #ff6f61;
+    }
+    canvas {
+      display: block;
+      margin: 1.5rem auto;
+      max-width: 100%;
+      border-radius: 10px;
+      background: #eee;
+    }
+    button {
+      background: #ff6f61;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      font-size: 1.1rem;
+      border-radius: 25px;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto;
+      box-shadow: 0 3px 6px rgba(255,111,97,0.5);
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #e65c4f;
+    }
+    @media (max-width: 400px) {
+      .preset-img {
+        width: 60px;
+        height: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Meme Caption Maker</h1>
+  <a href="index.html">← Back to Home</a>
+</header>
+
+<main>
+  <label for="upload">Upload your image:</label>
+  <input type="file" id="upload" accept="image/*" />
+
+  <label>Or pick a preset image:</label>
+  <div class="presets">
+    <img src="https://i.imgur.com/w1aLFfH.jpg" alt="Preset 1" class="preset-img" />
+    <img src="https://i.imgur.com/2vqVCqL.jpg" alt="Preset 2" class="preset-img" />
+    <img src="https://i.imgur.com/yM9y6Jv.jpg" alt="Preset 3" class="preset-img" />
+  </div>
+
+  <label for="top-text">Top Text:</label>
+  <input type="text" id="top-text" placeholder="Enter top caption..." maxlength="50" />
+
+  <label for="bottom-text">Bottom Text:</label>
+  <input type="text" id="bottom-text" placeholder="Enter bottom caption..." maxlength="50" />
+
+  <canvas id="meme-canvas" width="500" height="500"></canvas>
+
+  <button id="download-btn">Download Meme</button>
+</main>
+
+<script>
+  const uploadInput = document.getElementById('upload');
+  const presetImages = document.querySelectorAll('.preset-img');
+  const topTextInput = document.getElementById('top-text');
+  const bottomTextInput = document.getElementById('bottom-text');
+  const canvas = document.getElementById('meme-canvas');
+  const ctx = canvas.getContext('2d');
+  const downloadBtn = document.getElementById('download-btn');
+
+  let currentImage = new Image();
+
+  // Initialize with first preset image
+  currentImage.crossOrigin = 'anonymous';
+  currentImage.src = presetImages[0].src;
+  presetImages[0].classList.add('selected');
+
+  currentImage.onload = () => {
+    drawMeme();
+  };
+
+  // Draw meme function
+  function drawMeme() {
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Calculate image ratio to fit canvas
+    let ratio = Math.min(canvas.width / currentImage.width, canvas.height / currentImage.height);
+    let imgWidth = currentImage.width * ratio;
+    let imgHeight = currentImage.height * ratio;
+    let x = (canvas.width - imgWidth) / 2;
+    let y = (canvas.height - imgHeight) / 2;
+
+    // Draw image
+    ctx.drawImage(currentImage, x, y, imgWidth, imgHeight);
+
+    // Text styles
+    ctx.fillStyle = 'white';
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 3;
+    ctx.textAlign = 'center';
+    ctx.font = 'bold 36px Comic Sans MS, cursive, sans-serif';
+    ctx.textBaseline = 'top';
+
+    // Draw top text
+    let topText = topTextInput.value.toUpperCase();
+    wrapText(ctx, topText, canvas.width / 2, y + 10, canvas.width - 20, 40);
+
+    // Draw bottom text
+    ctx.textBaseline = 'bottom';
+    let bottomText = bottomTextInput.value.toUpperCase();
+    wrapText(ctx, bottomText, canvas.width / 2, y + imgHeight - 10, canvas.width - 20, 40, true);
+  }
+
+  // Wrap text function
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight, fromBottom = false) {
+    const words = text.split(' ');
+    let line = '';
+    const lines = [];
+    for (let n = 0; n < words.length; n++) {
+      const testLine = line + words[n] + ' ';
+      const metrics = ctx.measureText(testLine);
+      const testWidth = metrics.width;
+      if (testWidth > maxWidth && n > 0) {
+        lines.push(line);
+        line = words[n] + ' ';
+      } else {
+        line = testLine;
+      }
+    }
+    lines.push(line);
+
+    if (fromBottom) {
+      for (let i = lines.length - 1; i >= 0; i--) {
+        ctx.strokeText(lines[i], x, y - lineHeight * (lines.length - 1 - i));
+        ctx.fillText(lines[i], x, y - lineHeight * (lines.length - 1 - i));
+      }
+    } else {
+      for (let i = 0; i < lines.length; i++) {
+        ctx.strokeText(lines[i], x, y + lineHeight * i);
+        ctx.fillText(lines[i], x, y + lineHeight * i);
+      }
+    }
+  }
+
+  // Event listeners for inputs
+  topTextInput.addEventListener('input', drawMeme);
+  bottomTextInput.addEventListener('input', drawMeme);
+
+  // Handle file upload
+  uploadInput.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        currentImage = new Image();
+        currentImage.crossOrigin = 'anonymous';
+        currentImage.onload = drawMeme;
+        currentImage.src = event.target.result;
+      }
+      reader.readAsDataURL(e.target.files[0]);
+      clearSelectedPreset();
+    }
+  });
+
+  // Handle preset image click
+  presetImages.forEach(img => {
+    img.addEventListener('click', () => {
+      currentImage = new Image();
+      currentImage.crossOrigin = 'anonymous';
+      currentImage.onload = drawMeme;
+      currentImage.src = img.src;
+      clearSelectedPreset();
+      img.classList.add('selected');
+      uploadInput.value = '';
+    });
+  });
+
+  function clearSelectedPreset() {
+    presetImages.forEach(img => img.classList.remove('selected'));
+  }
+
+  // Download meme image
+  downloadBtn.addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.download = 'my-meme.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+</script>
+
+</body>
+</html>

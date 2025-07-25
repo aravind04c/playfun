@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Compliment Generator 😊</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background: linear-gradient(135deg, #f8cdda, #1d2b64);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 2rem;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px 4px #0008;
+    }
+    #compliment {
+      font-size: 1.8rem;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: rgba(255 255 255 / 0.15);
+      border-radius: 15px;
+      max-width: 600px;
+      min-height: 100px;
+      user-select: none;
+      box-shadow: 0 0 10px rgba(255 255 255, 0.3);
+      transition: background 0.3s ease;
+    }
+    #compliment:hover {
+      background: rgba(255 255 255 / 0.25);
+    }
+    button {
+      background-color: #ff6f91;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      cursor: pointer;
+      color: white;
+      box-shadow: 0 4px 15px #ff6f91aa;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    button:hover {
+      background-color: #e64a76;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Compliment Generator 😊</h1>
+  <div id="compliment">Click the button to get a compliment!</div>
+  <button id="generateBtn">Get Compliment</button>
+
+  <script>
+    const compliments = [
+      "You're like a ray of sunshine on a really dreary day.",
+      "You have impeccable manners. Seriously, wow!",
+      "Your creativity is off the charts!",
+      "You light up the room with your presence.",
+      "You have the best laugh. It’s contagious!",
+      "Your perspective is refreshing and unique.",
+      "You always know how to make people smile.",
+      "You're a great friend and an amazing person.",
+      "You have a heart of gold.",
+      "You're one of a kind – and that's a compliment!",
+      "Your style is absolutely stunning!",
+      "You're braver than you believe, stronger than you seem.",
+      "Your positivity is infectious!",
+      "You make the world a better place just by being in it.",
+      "Your sense of humor is fantastic!",
+      "You bring out the best in people.",
+      "You're smarter than you think.",
+      "Your kindness is a balm to all who encounter it.",
+      "You inspire me every day.",
+      "You have a beautiful soul."
+    ];
+
+    const complimentDiv = document.getElementById('compliment');
+    const generateBtn = document.getElementById('generateBtn');
+
+    generateBtn.addEventListener('click', () => {
+      const randomIndex = Math.floor(Math.random() * compliments.length);
+      complimentDiv.textContent = compliments[randomIndex];
+    });
+  </script>
+  
+</body>
+</html>
